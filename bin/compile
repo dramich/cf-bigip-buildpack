@@ -1,5 +1,6 @@
 #!/bin/bash
 set -euo pipefail
+set -x
 
 BUILD_DIR=$1
 CACHE_DIR=$2
@@ -17,7 +18,6 @@ echo "BUILD_DIR" $BUILD_DIR
 echo "CACHE_DIR" $CACHE_DIR
 echo "BUILDPACK_DIR" $BUILDPACK_DIR
 pwd
-ls $BUILD_DIR
 
 GO_VERSION="1.8.3"
 
@@ -44,7 +44,21 @@ if [ ! -f $GoInstallDir/go/bin/go ]; then
   echo "       **ERROR** Could not download go"
   exit 1
 fi
-cd $BUILD_DIR
-GOROOT=$GoInstallDir/go GOPATH=$BUILD_DIR $GoInstallDir/go/bin/go list
+
+export GOROOT=$GoInstallDir/go
+export GOPATH=$BUILD_DIR
+PATH=$GOROOT/bin:$PATH
+PATH=$GOPATH/bin:$PATH
+
+p=$GOPATH/src/github.com/F5Networks/cf-bigip-ctlr
+mkdir -p $p
+rsync -a $BUILD_DIR/ $p/
+
+go get github.com/tools/godep
+cd $p
+godep restore
+ls $BUILD_DIR
+go build -v -o $BUILD_DIR/cf-bigip-ctlr
+ls $BUILD_DIR
 $BUILDPACK_PATH/bin/supply "$BUILD_DIR" "$CACHE_DIR" "$DEPS_DIR" 0
 $BUILDPACK_PATH/bin/finalize "$BUILD_DIR" "$CACHE_DIR" "$DEPS_DIR" 0
