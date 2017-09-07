@@ -1,7 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
-BUILD_DIR=$1
+export BUILD_DIR=$1
+export DEPS_DIR=$2
+export DEPS_IDX=$3
 
 GO_VERSION="1.8.3"
 
@@ -41,4 +43,5 @@ rsync -a $BUILD_DIR/ $p/
 go get github.com/tools/godep
 cd $p
 godep restore
-go build -v -o $BUILD_DIR/cf-bigip-ctlr
+
+go build -v -o $DEPS_DIR/$DEPS_IDX/bin/cf-bigip-ctlr
