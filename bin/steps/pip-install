@@ -15,16 +15,11 @@ if [ -f $CACHE_DIR/egg-path-prefix ]; then
   set -e
 fi
 
-if test -d $BUILD_DIR/vendor; then
-  pip install -r requirements.txt --exists-action=w --src=$DEPS_DIR/$DEPS_IDX/src --no-index --find-links=file://$BUILD_DIR/vendor | cleanup | indent
-  cp requirements.txt $DEPS_DIR/$DEPS_IDX/python/requirements-declared.txt
-  pip freeze --find-links=file://$BUILD_DIR/vendor --disable-pip-version-check > $DEPS_DIR/$DEPS_IDX/python/requirements-installed.txt
-else
-  pip install -r requirements.txt --exists-action=w --src=$DEPS_DIR/$DEPS_IDX/src | cleanup | indent
+pip install -r requirements.txt --exists-action=w --src=$DEPS_DIR/$DEPS_IDX/src | cleanup | indent
 
-  cp requirements.txt $DEPS_DIR/$DEPS_IDX/python/requirements-declared.txt
-  pip freeze > $DEPS_DIR/$DEPS_IDX/python/requirements-installed.txt
-fi
+cp requirements.txt $DEPS_DIR/$DEPS_IDX/python/requirements-declared.txt
+pip freeze > $DEPS_DIR/$DEPS_IDX/python/requirements-installed.txt
+
 
 pushd $DEPS_DIR/$DEPS_IDX/bin >/dev/null
   ln -sf ../python/bin/* .
