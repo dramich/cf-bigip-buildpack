@@ -60,6 +60,12 @@ set-env-prepend LD_LIBRARY_PATH $DEPS_DIR/$DEPS_IDX/lib
 # Switch to the repo's context.
 cd $BUILD_DIR
 
+# Copy over the controllers requirements where the buildpack expects it to be
+cp python/cf-runtime-requirements.txt requirements.txt
+
+# Install all the go pieces and create the binary
+$BUILDPACK_PATH/bin/steps/goinstall "$BUILD_DIR" "$DEPS_DIR" "$DEPS_IDX"
+
 # Warn for lack of Procfile.
 if [[ ! -f Procfile ]]; then
   puts-warn 'Warning: Your application is missing a Procfile. This file tells Cloud Foundry how to run your application.'
