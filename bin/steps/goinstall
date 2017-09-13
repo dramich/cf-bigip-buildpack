@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # Portions Copyright (c) 2017, F5 Networks, Inc.
+# Portions Copyright (c) 2017 nodejs-buildpack authors
+#   https://github.com/cloudfoundry/nodejs-buildpack
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#  https://github.com/cloudfoundry/nodejs-buildpack
 
 set -euo pipefail
 
